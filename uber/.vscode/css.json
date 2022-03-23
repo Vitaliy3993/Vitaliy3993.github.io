@@ -1,0 +1,19 @@
+{
+    "compile-hero.disable-compile-files-on-did-save-code": true
+}
+
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "sassFormat.dasherize": true
+},
+
+{"liveSassCompile.settings.autoprefix": 
+    "> 1%",
+    "last 2 versions"
+
+
+"liveSassCompile.settings.formats": 
+    "format":"expanded",
+    "extensionName": ".min.css",
+    "savePath": "./css"
+}

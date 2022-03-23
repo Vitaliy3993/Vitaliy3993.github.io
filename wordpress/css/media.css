@@ -1,0 +1,74 @@
+@media (max-width: 991px) {
+    .container {
+        max-width: 100%;
+    }
+    .promo {
+        height: 100%;
+    }
+    .promo h1.title, .promo h2.title {
+        line-height: 50px;
+        font-size: 30px;
+    }
+    .promo h2.title_big {
+        margin: 0 auto;
+        font-size: 45px;
+    }
+    .promo .promo_text {
+        width: 100%;
+    }
+    .title_big_divider {
+        display: none;
+    }
+    .waiting .waiting_header {
+        line-height: 30px;
+    }
+    .waiting .waiting_divider {
+        margin-top: 50px;
+    }
+    .waiting .waiting_wrepper {
+        display: block;
+        margin: 0 auto;
+    }
+    .waiting .waiting_item {
+        display: block;
+        margin: 0 auto;
+        margin-top: 60px;
+    }
+
+    .optimization .optimization_header {
+        display: block;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .optimization .optimization_text {
+        display: block;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .optimization .optimization_img {
+        left: -420px;
+    }
+    .finish .finish_header {
+        line-height: 30px;
+    }
+    .finish .finish_divider {
+        margin-top: 90px;
+    }
+    .finish .finish_wrepper {
+        display: block;
+        margin: 0 auto;
+    }
+    .finish .finish_item {
+        display: block;
+        margin: 0 auto;
+        margin-top: 20px;
+    }
+    .bonus .bonus_wrepper .bonus_header {
+        font-size: 18px;
+    }
+    .webinar .webinar_header {
+        line-height: 30px;
+    }
+    .webinar .webinar_subheader {
+        margin-top: 40px;
+    }
