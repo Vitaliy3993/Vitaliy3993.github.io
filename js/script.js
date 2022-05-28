@@ -170,7 +170,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
         let offset = 0;
         let slideIndex = 1;
-    
+
         slidesField.style.width = 100 * slides.length + '%';
         slidesField.style.display = 'flex';
         slidesField.style.transition = '0.5s all';
@@ -184,14 +184,19 @@ window.addEventListener('DOMContentLoaded', () => {
         slider.style.position = 'relative';
     
         function replaceWidth(str) {
-           return +str.replace(/\D/g, '');
+            if (document.documentElement.offsetWidth < 600) {
+                return +str.replace(/\D/g, '').slice(0, 3); 
+            } else {
+              return +str.replace(/\D/g, '');  
+            }
+            
         }
     
         next.addEventListener('click', () => {
-            if (offset == replaceWidth(width) * (slides.length - 1)) {
+            if (offset == parseFloat(replaceWidth(width)) * (slides.length - 1)) {
                 offset = 0;
             } else {
-                offset += replaceWidth(width);
+                offset += parseFloat(replaceWidth(width));
             }
     
             slidesField.style.transform = `translateX(-${offset}px)`;
