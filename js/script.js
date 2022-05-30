@@ -7,29 +7,54 @@ window.addEventListener('DOMContentLoaded', () => {
               closeElem = document.querySelector('.menu__close'),
               overlay = document.querySelector('.menu__overlay');
 
+
         hamburger.addEventListener('click', () => {
             menu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            let scroll = calcScroll();
+            document.body.style.marginRight = `${scroll}px`;
         });
 
         function closeMenu() {
             closeElem.addEventListener('click', () => {
                 menu.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.style.marginRight = `0px`;
             });
             overlay.addEventListener('click', () => {
                 menu.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.style.marginRight = `0px`;
             });
         }
 
         document.addEventListener('keydown', (e) => {
             if (e.code === "Escape" && menu.classList.contains('active')) {
                 menu.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.style.marginRight = `0px`;
             }
         });
+
+        function calcScroll() {
+            let div = document.createElement('div');
+    
+            div.style.width = '50px';
+            div.style.height = '50px';
+            div.style.overflowY = 'scroll';
+            div.style.visibility = 'hidden';
+    
+            document.body.appendChild(div);
+            let scrollWidth = div.offsetWidth - div.clientWidth;
+            div.remove();
+    
+            return scrollWidth;
+        }
 
         closeMenu();
     }
 
-    const accordeon = (triggers, selector) => {
+    const accordion = (triggers, selector) => {
         const trggs = document.querySelectorAll(triggers),
               selectorName = document.querySelectorAll(selector);
 
@@ -116,7 +141,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const borderDescr = (selector, descrSelector) => {
+    const skillDescr = (selector, descrSelector) => {
         const select = document.querySelectorAll(selector),
               descr = document.querySelectorAll(descrSelector);
 
@@ -170,6 +195,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
         let offset = 0;
         let slideIndex = 1;
+        let paused = false;
 
         slidesField.style.width = 100 * slides.length + '%';
         slidesField.style.display = 'flex';
@@ -192,20 +218,33 @@ window.addEventListener('DOMContentLoaded', () => {
             
         }
     
-        next.addEventListener('click', () => {
+        function nextBtnSlide() {
             if (offset == parseFloat(replaceWidth(width)) * (slides.length - 1)) {
                 offset = 0;
-            } else {
-                offset += parseFloat(replaceWidth(width));
-            }
-    
-            slidesField.style.transform = `translateX(-${offset}px)`;
-    
-            if (slideIndex == slides.length) {
-                slideIndex = 1;
-            } else {
-                slideIndex++;
-            }
+                } else {
+                    offset += parseFloat(replaceWidth(width));
+                }
+        
+                slidesField.style.transform = `translateX(-${offset}px)`;
+        
+                if (slideIndex == slides.length) {
+                    slideIndex = 1;
+                } else {
+                    slideIndex++;
+            } 
+        }
+
+        let timerSlide = setInterval(nextBtnSlide, 6000);
+
+        next.addEventListener('click', () => {
+            nextBtnSlide();  
+        });
+
+        slider.addEventListener('mouseenter', () => {
+            clearInterval(timerSlide);
+        });
+        slider.addEventListener('mouseleave', () => {
+            timerSlide = setInterval(nextBtnSlide, 5000);
         });
     
         prev.addEventListener('click', () => {
@@ -225,10 +264,75 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function animationTextInterval(textAnimation) {
+        const title = document.querySelector(textAnimation);
+
+        setInterval(function() {
+            title.classList.remove('animate__fadeInUp');
+            title.classList.toggle('animate__fast');
+            title.classList.toggle('animate__flash');
+        }, 5000);
+    }
+
+    function changeLang() {
+        const langTrigger = document.querySelectorAll('.menu__trigger__lang');
+        const langClassUa = document.querySelectorAll('.lang-ua'),
+              langClassRu = document.querySelectorAll('.lang-ru');
+
+        langClassRu.forEach(lang => {
+            lang.style.display = 'none';
+        });
+
+        langTrigger.forEach((trigger, i) => {
+            trigger.addEventListener('click', (e) => {
+                langTrigger.forEach(item => {
+                   item.classList.remove('menu__trigger__lang__active'); 
+                })
+                e.target.classList.add('menu__trigger__lang__active');
+
+                if (e.target.classList.contains('language-ru')) {
+                    langClassUa.forEach(lang => {
+                        lang.style.display = 'none';
+                        langClassRu.forEach(lang => {
+                            lang.style.display = '';
+                        });
+                    });
+                } else {
+                    langClassRu.forEach(lang => {
+                        lang.style.display = 'none';
+                        langClassUa.forEach(lang => {
+                            lang.style.display = '';
+                        });
+                    });
+                }
+            });
+        })
+    }
+
+    function scrollHeightAnimation(selector) {
+        function onEntry(entry) {
+            entry.forEach(change => {
+              if (change.isIntersecting) {
+               change.target.classList.add('animate__animated', 'animate__fast', 'animate__fadeInUp');
+              }
+            });
+          }
+          
+        let options = {
+            threshold: [0.5] 
+        };
+        let observer = new IntersectionObserver(onEntry, options);
+        let elements = document.querySelectorAll(selector);
+        
+        for (let elm of elements) {
+            observer.observe(elm);
+        }
+    }
+
     menu();
-    accordeon('.about__skill-main-wrapper', '.about__skill-accordeon');
+    accordion('.about__skill-main-wrapper', '.about__skill-accordeon');
     scrolling('.pageup');
-    borderDescr('.skill__item', '.skill__descr');
+    skillDescr('.skill__item', '.skill__descr');
     slider({
         container: '.portfolio__slider',
         slide: '.portfolio__image',
@@ -237,4 +341,8 @@ window.addEventListener('DOMContentLoaded', () => {
         wrapper: '.portfolio__window',
         field: '.porfolio__field'
     });
+    animationTextInterval('[data-anime]');
+    changeLang();
+    scrollHeightAnimation('.skill__percents');
+    scrollHeightAnimation('.price');
 });
